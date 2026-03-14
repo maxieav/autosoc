@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: autosoc
+      POSTGRES_PASSWORD: autosoc
+      POSTGRES_DB: autosoc
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://autosoc:autosoc@db:5432/autosoc
+      OLLAMA_BASE_URL: http://ollama:11434
+    depends_on:
+      - db
+      - ollama
+
+volumes:
+  pgdata:
+  ollama_data:
