@@ -30,7 +30,7 @@ class ThreatDetector:
         ),
         Rule(
             "sql_injection",
-            r"(?i)(select|union|insert|drop|delete)\s+.*from|'--|\bor\b\s+1=1",
+            r"(select|union|insert|drop|delete)\s+.*from|'--|\bor\b\s+1=1",
             "CRITICAL",
             "SQL injection attempt",
         ),
